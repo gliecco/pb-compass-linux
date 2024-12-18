@@ -11,7 +11,9 @@ A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no
 2. [Ativação e configuração do WSL](#2-ativação-e-configuração-do-wsl)
 3. [Instalação e Configuração do Ubuntu 20.04 LTS](#3-instalação-e-configuração-do-ubuntu-2004-lts)
 4. [Instalação e Configuração do nginx](#4-instalação-e-configuração-do-nginx)
-
+5. [Criação do script de Monitoramento](#5-criação-do-script-de-monitoramento-do-status-do-nginx)
+    - 5.1 [Configuração do Diretório](#51-configuração-do-diretório)
+    
 ## 1. Pré-requisitos
 
 - Windows 10 versão 2004 e superior ou Windows 11
@@ -36,9 +38,10 @@ Abra o PowerShell como administrador e execute o comando:
 ```powershell
 wsl --install -d Ubuntu-20.04
 ```
-
+<details>
+<summary>**Instalação pela Microsoft Store**</summary>
 Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
-
+</details>
 Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
 
 ## 4. Instalação e Configuração do nginx
@@ -69,6 +72,11 @@ Caso o nginx esteja rodando corretamente, o comando retornará uma saída como e
 
 ![Status do nginx Ativo](imgs/nginx_status_ativo.jpeg)
 
-Para verificar se o servidor está funcionando, abra o navegador e digite http://localhost na barra de endereços. Se tudo estiver certo, o servidor vai mostrar a página padrão do Nginx:
+Para verificar se o servidor está funcionando, abra o navegador e digite "localhost" ("localhost" é como um atalho que aponta para o seu próprio computador, permitindo que você verifique se o servidor instalado está respondendo normalmente) na barra de endereços. Se tudo estiver certo, o servidor vai mostrar a página padrão do Nginx:
 
 ![Página Padrão do nginx](imgs/nginx_via_localhost.jpeg)
+
+## 5. Criação do script de monitoramento do status do nginx
+
+### 5.1 Configuração do Diretório
+
