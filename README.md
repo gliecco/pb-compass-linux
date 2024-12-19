@@ -14,6 +14,8 @@ A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no
    - 5.1 [Configuração do Diretório](#51-configuração-do-diretório)
    - 5.2 [Criação do Script](#52-criação-do-script)
 6. [Automatização do Script](#6-automatização-do-script)
+   - 6.1 [Validando a Automatização do Script](#61-validando-a-automatização-do-script)
+7. [Referências](#7-referências)
 
 ## 1. Pré-requisitos
 
@@ -201,3 +203,8 @@ Exemplo das saídas no arquivo de log com o serviço online:
 Exemplo das saídas no arquivo de log com o serviço offline:
 
 ![Logs do Cron Offline](imgs/offline_log_cron_entries.jpeg)
+
+## 7. Referências
+
+- [Documentação do WSL](https://docs.microsoft.com/en-us/windows/wsl/)
+- [Documentação do nginx](https://nginx.org/en/docs/)
