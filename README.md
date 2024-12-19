@@ -13,6 +13,7 @@ A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no
 5. [Criação do script de Monitoramento](#5-criação-do-script-de-monitoramento-do-status-do-nginx)
    - 5.1 [Configuração do Diretório](#51-configuração-do-diretório)
    - 5.2 [Criação do Script](#52-criação-do-script)
+6. Automatização do Script (#6-automatização-do-script)
 
 ## 1. Pré-requisitos
 
@@ -40,7 +41,7 @@ wsl --install -d Ubuntu-20.04
 ```
 
 <details>
-<summary>**Instalação pela Microsoft Store**</summary>
+<summary>Instalação pela Microsoft Store</summary>
 Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
 </details>
 Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
@@ -87,15 +88,13 @@ Antes de criar o script, criaremos o diretório onde serão armazenados os logs 
 sudo mkdir /var/log/nginx_status
 ```
 
-Por padrão, o diretório será de propriedade do root, e seu usuário não terá permissão para gravar nele. Para corrigir isso, usamos:
+Altere a propriedade do diretório para seu usuário:
 
 ```bash
 sudo chown seu_usuario:seu_usuario /var/log/nginx_status
 ```
 
-Isso altera a propriedade para o seu usuário e permite que você crie, modifique e exclua arquivos no diretório.
-
-Em seguida, ajustamos as permissões:
+Em seguida, ajuste as permissões:
 
 ```bash
 sudo chmod 755 /var/log/nginx_status
@@ -105,7 +104,7 @@ Essa configuração garante que você tenha acesso total ao diretório, enquanto
 
 ### 5.2 Criação do Script
 
-Armazenanaremos o script dentro do diretório `/usr/local/bin`, que é o diretório destinado a programas e scripts locais. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
+Armazenanaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
 
 Para criar o script, utilize o seguinte comando:
 
@@ -144,3 +143,31 @@ Pressione `CTRL + O` e `ENTER` para salvar e `CTRL + X` para sair. Após isso, g
 ```bash
 sudo chmod +x /usr/local/bin/nginx_status_monitor.sh
 ```
+
+## 6. Automatização do Script
+
+Para automatizar a execução do script, usaremos o serviço **cron**. O cron é um serviço do sistema operacional responsável por agendar e executar tarefas automaticamente em intervalos definidos. Ele usa o arquivo **crontab** para armazenar as configurações das tarefas, que podem ser executadas em horários específicos. Para automatizar nosso script, execute o seguinte comando para abrir e editar o crontab:
+
+```bash
+crontab -e
+```
+
+Selecione um editor de texto. Adicione a seguinte linha ao arquivo:
+
+```bash
+*/5 * * * * ~/scripts/nginx_status_monitor.sh
+```
+
+Salve e saia do arquivo.
+
+Os arquivos de configuração do cron possuem cinco campos para especificar tempo e data, seguidos pelo comando que será executado. Cada um desses cinco campos é separado por um espaço e não podem haver espaços dentro de cada campo. Eles são os seguintes:
+
+- Minuto (0-59)
+- Hora (0-23, onde 0 = meia-noite)
+- Dia do mês (1-31)
+- Mês (1-12)
+- Dia da semana (0-6, onde 0 = domingo)
+
+Um asterisco (\*) pode ser usado para indicar que todas as ocorrências (todas as horas, todos os dias da semana, todos os meses, etc.) de um período de tempo devem ser consideradas.
+
+Sendo asssim, no nosso caso, a expressão \*/5 \* \* \* \* faz com que o script seja executado a cada 5 minutos, independentemente da hora, dia do mês, mês ou dia da semana.
