@@ -108,7 +108,7 @@ Essa configuração garante que você tenha acesso total ao diretório, enquanto
 
 Armazenanaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
 
-Para criar o script, utilize o seguinte comando:
+Para criar e editar o script, utilize um editor de texto. Utilizando o `nano`:
 
 ```bash
 sudo nano /usr/local/bin/nginx_status_monitor.sh
