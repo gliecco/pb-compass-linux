@@ -46,6 +46,7 @@ wsl --install -d Ubuntu-20.04
 <summary>Instalação pela Microsoft Store</summary>
 </br>Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
 </details>
+
 Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
 
 ## 4. Instalação e Configuração do nginx
@@ -76,7 +77,7 @@ Caso o nginx esteja rodando corretamente, o comando retornará uma saída como e
 
 ![Status do nginx Ativo](imgs/nginx_status_ativo.jpeg)
 
-Para verificar se o servidor está funcionando, abra o navegador e digite "localhost" ("localhost" é como um atalho que aponta para o seu próprio computador, permitindo que você verifique se o servidor está respondendo normalmente) na barra de endereços. Se tudo estiver certo, o servidor vai mostrar a página padrão do nginx:
+Para verificar se o servidor está funcionando, abra o navegador e digite "https://localhost" na barra de endereços. 'Localhost' aponta para o IP do seu próprio computador, permitindo que você acesse o servidor localmente. Se tudo estiver certo, o servidor vai mostrar a página padrão do nginx:
 
 ![Página Padrão do nginx](imgs/nginx_via_localhost.jpeg)
 
