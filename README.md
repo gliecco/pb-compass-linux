@@ -11,7 +11,7 @@ A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no
 3. [Instalação e Configuração do Ubuntu 20.04 LTS](#3-instalação-e-configuração-do-ubuntu-2004-lts)
 4. [Instalação e Configuração do nginx](#4-instalação-e-configuração-do-nginx)
 5. [Criação do script de Monitoramento](#5-criação-do-script-de-monitoramento-do-status-do-nginx)
-   - 5.1 [Configuração do Diretório](#51-configuração-do-diretório)
+   - 5.1 [Configuração do Diretório de Logs](#51-configuração-do-diretório-de-logs)
    - 5.2 [Criação do Script](#52-criação-do-script)
 6. [Automatização do Script](#6-automatização-do-script)
    - 6.1 [Validando a Automatização do Script](#61-validando-a-automatização-do-script)
@@ -44,7 +44,7 @@ wsl --install -d Ubuntu-20.04
 
 <details>
 <summary>Instalação pela Microsoft Store</summary>
-Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
+</br>Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
 </details>
 Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
 
