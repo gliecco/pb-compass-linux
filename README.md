@@ -76,7 +76,7 @@ Caso o nginx esteja rodando corretamente, o comando retornará uma saída como e
 
 ![Status do nginx Ativo](imgs/nginx_status_ativo.jpeg)
 
-Para verificar se o servidor está funcionando, abra o navegador e digite "https://localhost" na barra de endereços. 'Localhost' aponta para o IP do seu próprio computador, permitindo que você acesse o servidor localmente. Se tudo estiver certo, o servidor vai mostrar a página padrão do nginx:
+Para verificar se o servidor está funcionando, abra o navegador e digite "https://localhost" na barra de endereços. 'Localhost' aponta para o IP do seu próprio computador, permitindo que você acesse o servidor localmente. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
 
 ![Página Padrão do nginx](imgs/nginx_via_localhost.jpeg)
 
@@ -106,7 +106,7 @@ Essa configuração garante que você tenha acesso total ao diretório, enquanto
 
 ### 5.2 Criação do Script
 
-Armazenanaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
+Armazenaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
 
 Para criar e editar o script, utilize um editor de texto. Utilizando o `nano`:
 
