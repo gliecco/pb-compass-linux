@@ -42,12 +42,11 @@ Abra o PowerShell como administrador e execute o comando:
 wsl --install -d Ubuntu-20.04
 ```
 
-<details>
-<summary>Instalação pela Microsoft Store</summary>
-</br>Alternativamente, você pode abrir a Microsoft Store, buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
-</details>
+Alternativamente, você pode optar por instalar o Ubuntu pela Microsoft Store. Basta buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
 
-Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
+
+> [!NOTE]
+> Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
 
 ## 4. Instalação e Configuração do nginx
 
@@ -209,3 +208,4 @@ Exemplo das saídas no arquivo de log com o serviço offline:
 
 - [Documentação do WSL](https://docs.microsoft.com/en-us/windows/wsl/)
 - [Documentação do nginx](https://nginx.org/en/docs/)
+- [Guia de Configuração e Uso de Cron Jobs](https://www.pantz.org/software/cron/croninfo)
