@@ -152,7 +152,7 @@ Para verificar se está funcionando corretamente, execute o script manualmente:
 nginx_status_monitor.sh
 ```
 
-E verifique os arquivos de log correspondentes. Exemplo do arquivo de log `nginx_online.log` com os logs do serviço ativos:
+Em seguida, verifique os arquivos de log correspondentes. Exemplo do arquivo de log `nginx_online.log` com os logs do serviço ativos:
 
 ![Entrada de Log Online Manual](imgs/manual_online_log_entry.jpeg)
 
@@ -182,11 +182,11 @@ Os arquivos de configuração do cron possuem cinco campos para especificar temp
 
 Um asterisco (\*) pode ser usado para indicar que todas as ocorrências (todas as horas, todos os dias da semana, todos os meses, etc.) de um período de tempo devem ser consideradas.
 
-Sendo asssim, no nosso caso, a expressão \*/5 \* \* \* \* faz com que o script seja executado a cada 5 minutos, independentemente da hora, dia do mês, mês ou dia da semana.
+Sendo assim, no nosso caso, a expressão \*/5 \* \* \* \* faz com que o script seja executado a cada 5 minutos, independentemente da hora, dia do mês, mês ou dia da semana.
 
 ### 6.1 Validando a automatização do script
 
-Após salvar as configurações no crontab, inicia-se a execução do script a cada cinco minutos. Podemos checar a lista de tarefas agendadas no cron com o seguinte comando:
+Após salvar as configurações no crontab, a execução do script será iniciada automaticamente a cada cinco minutos. Podemos checar a lista de tarefas agendadas no cron com o seguinte comando:
 
 ```bash
 crontab -l
