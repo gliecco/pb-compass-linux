@@ -2,13 +2,14 @@
 
 ## Sobre o projeto
 
-A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no Windows e na criação de uma instância Ubuntu 20.04 LTS. Inclui também a configuração de um servidor nginx, o monitoramento do status do serviço por meio de um script personalizado e a automatização da execução deste script a cada 5 minutos. O script deve conter a data, hora, o nome do serviço, o status e uma mensagem personalizada de ONLINE ou OFFLINE. O objetivo é garantir a continuidade e a disponibilidade do serviço, registrando seu status em arquivos separados.
+Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Server 24.04 LTS para configurar um servidor nginx, monitorar o status do serviço por meio de um script personalizado e automatizar sua execução a cada 5 minutos. O script deve registrar a data, hora, nome do serviço, status e uma mensagem personalizada de ONLINE ou OFFLINE, permitindo monitorar a continuidade e a disponibilidade do serviço.
 
 ### Índice
 
 1. [Pré-requisitos](#1-pré-requisitos)
-2. [Ativação e configuração do WSL](#2-ativação-e-configuração-do-wsl)
-3. [Instalação e Configuração do Ubuntu 20.04 LTS](#3-instalação-e-configuração-do-ubuntu-2004-lts)
+2. [Configuração do Ambiente Virtual (VPC)](#2-configuração-do-ambiente-virtual-vpc)
+    - 2.1 [Craição da VPC](#21-criação-da-vpc)
+3. [Criação e Configuração da Instância EC2](#3-criação-e-configuração-da-instância-ec2)
 4. [Instalação e Configuração do nginx](#4-instalação-e-configuração-do-nginx)
 5. [Criação do script de Monitoramento](#5-criação-do-script-de-monitoramento-do-status-do-nginx)
    - 5.1 [Configuração do Diretório de Logs](#51-configuração-do-diretório-de-logs)
@@ -19,34 +20,24 @@ A prática consiste na instalação do WSL (Subsistema do Windows para Linux) no
 
 ## 1. Pré-requisitos
 
-- Windows 10 versão 2004 e superior ou Windows 11
+- Uma conta ativa na AWS
 - Conhecimento básico do terminal Linux
+- Conhecimento básico do console AWS
 
-## 2. Ativação e configuração do WSL
+## 2. Configuração do Ambiente Virtual (VPC)
 
-Clique com o botão direito do mouse sobre o PowerShell ou o Prompt de Comando do Windows e selecione **"Executar como administrador"**.
+Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede onde ela será executada. Vamos criar uma VPC (Virtual Private Cloud) dedicada para nosso servidor Nginx.
 
-Depois, execute o comando:
+### 2.1 Criação da VPC
 
-```powershell
-wsl --install
-```
+No console AWS, acesse o serviço VPC e crie uma nova VPC dedicada ao projeto:
 
-Após executado o comando e terminado a instalação do WSL, reinicie o computador.
+- Nome: nginx-vpc
+- CIDR: 10.0.0.0/16 (isso nos dará um espaço de endereços IP suficiente)
+- Habilite o DNS hostname para permitir que sua instância receba um nome DNS público
 
-## 3. Instalação e Configuração do Ubuntu 20.04 LTS
+## 3. Criação e Configuração da Instância EC2
 
-Abra o PowerShell como administrador e execute o comando:
-
-```powershell
-wsl --install -d Ubuntu-20.04
-```
-
-Alternativamente, você pode optar por instalar o Ubuntu pela Microsoft Store. Basta buscar por "Ubuntu 20.04 LTS", clicar em adquirir e instalar a distribuição.
-
-
-> [!NOTE]
-> Terminado o processo de instalação do Ubuntu no WSL, você será solicitado a criar um nome de usuário e senha. Esta conta será o **usuário padrão e administrador da distribuição**, com permissões para executar comandos de super usuário (`sudo`).
 
 ## 4. Instalação e Configuração do nginx
 
