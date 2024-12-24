@@ -44,12 +44,12 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 4. Configure os recursos: 
 
-- CIDR da VPC: 10.0.0.0/24 (fornece 256 endereços IP, suficiente para o projeto)
-- Número de zonas de disponibilidade (AZs): 1 (precisamos apenas de uma AZ)
-- Número de subnets públicas: 1 (apenas uma subnet pública para nosso servidor)
-- Número de subnets privadas: 0 (não precisaremos de subnets privadas)
-- NAT gateways: None 
-- VPC endpoints: None 
+    - CIDR da VPC: 10.0.0.0/24 (fornece 256 endereços IP, suficiente para o projeto)
+    - Número de zonas de disponibilidade (AZs): 1 (precisamos apenas de uma AZ)
+    - Número de subnets públicas: 1 (apenas uma subnet pública para nosso servidor)
+    - Número de subnets privadas: 0 (não precisaremos de subnets privadas)
+    - NAT gateways: None 
+    - VPC endpoints: None 
 
 5. Adicione uma tag de projeto:
 
@@ -60,15 +60,15 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ## 2.2 Criação da VPC 
 
-Clique em "**Criar VPC**" e aguarde a criação dos recursos
+1. Clique em "**Criar VPC**" e aguarde a criação dos recursos
 
-O wizard criará automaticamente:
+2. O wizard criará automaticamente:
 
-- Uma VPC com DNS hostnames habilitado
-- Uma subnet pública na AZ selecionada
-- Um Internet Gateway anexado à VPC
-- Uma Route Table configurada com rota para o Internet Gateway
-- Um Security Group padrão
+    - Uma VPC com DNS hostnames habilitado
+    - Uma subnet pública na AZ selecionada
+    - Um Internet Gateway anexado à VPC
+    - Uma Route Table configurada com rota para o Internet Gateway
+    - Um Security Group padrão
 
 #### Preview do VPC Workflow
 
