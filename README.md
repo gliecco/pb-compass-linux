@@ -38,11 +38,11 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ### 2.1 Configuração dos Recursos
  
-1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**.
+1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**
 
-2. Em "**Geração automática de etiqueta de nome**", deixe marcado para gerar os nomes automaticamente.
+2. Em "**Geração automática de etiqueta de nome**", deixe marcado para gerar os nomes automaticamente
 
-3. No campo de entrada, digite a etiqueta que deseja utilizar como prefixo para o nome dos recursos que serão criados.
+3. No campo de entrada, digite a etiqueta que deseja utilizar como prefixo para o nome dos recursos que serão criados
 
 4. Configure os recursos: 
 
@@ -53,7 +53,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
     - Gateway NAT: Nenhuma
     - VPC endpoints: Nenhuma 
 
-5. Opcionalmente, adicione uma tag de projeto à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto. 
+5. Opcionalmente, adicione uma tag de projeto à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto
 
     Exemplo de tag:
 ```
@@ -63,7 +63,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ## 2.2 Criação da VPC 
 
-1. Clique em "**Criar VPC**" e aguarde a criação dos recursos.
+1. Clique em "**Criar VPC**" e aguarde a criação dos recursos
 
 2. O wizard criará automaticamente:
 
@@ -83,13 +83,13 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos config
 
 ### 3.1 Configuração do Grupo de Segurança 
 
-1. Na aba de serviços, clique em "**EC2**". 
+1. Na aba de serviços, clique em "**EC2**"
 
-2. No painel EC2, na seção "**Rede e Segurança**", clique em "**Grupos de segurança**". 
+2. No painel EC2, na seção "**Rede e Segurança**", clique em "**Grupos de segurança**" 
 
-3. Localize o grupo de segurança criado pela sua VPC (procure pelo grupo de segurança associado ao ID da sua VPC no painel de informações), e clique nele para editar.
+3. Localize o grupo de segurança criado pela sua VPC (procure pelo grupo de segurança associado ao ID da sua VPC no painel de informações), e clique nele para editar
 
-4. Clique em editar as regras de entrada (Inbound rules).
+4. Clique em editar as regras de entrada (Inbound rules)
 
 5. Clique em adicionar regra. Adicione a regra para **SSH**:
 
@@ -115,50 +115,50 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos config
 
 ### 3.2 Criação da Instância
 
-1. Na página principal do EC2, clique em "**Executar instância**".
+1. Na página principal do EC2, clique em "**Executar instância**"
 
 2. Configurações gerais da instância:
 
-    2.1 Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro.
+    2.1 Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro
 
-    2.2 Selecione a AMI do **Ubuntu Server 24.04 LTS**. 
+    2.2 Selecione a AMI do **Ubuntu Server 24.04 LTS**
 
-    2.3 No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS.
+    2.3 No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS
 
-    2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH.
+    2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH
 
-    > [!IMPORTANT]
-    > Caso esteja utilizando o PuTTY no Windows para se conectar à instância, você deve gerar a chave no formato `.ppk`, pois é o formato compatível com o PuTTY. Já no Linux ou macOS, a chave gerada no formato `.pem` pode ser utilizada diretamente com o comando `ssh`.
+> [!IMPORTANT]
+> Caso esteja utilizando o PuTTY no Windows para se conectar à instância, você deve gerar a chave no formato `.ppk`, pois é o formato compatível com o PuTTY. Já no Linux ou macOS, a chave gerada no formato `.pem` pode ser utilizada diretamente com o comando `ssh`.
 
 3. Configurações de rede da instância:
 
-    3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto.
+    3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto
 
-    3.2 Em "**sub-rede**", selecione a sub-rede criada com a VPC.
+    3.2 Em "**sub-rede**", selecione a sub-rede criada com a VPC
 
-    3.3 Habilite a **atribuição de IP público automaticamente**.
+    3.3 Habilite a **atribuição de IP público automaticamente**
 
-    3.4 Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC.
+    3.4 Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC
 
-4. Mantenha as configurações de armazenamento padrões.
+4. Mantenha as configurações de armazenamento padrões
 
-5. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**".
+5. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**"
 
 ### 3.3 Alocação do Elastic IP
 
-1. No painel EC2, na seção "**Rede e Segurança**", navegue até "**IPs elásticos**".
+1. No painel EC2, na seção "**Rede e Segurança**", navegue até "**IPs elásticos**"
 
-2. Clique em "**Alocar endreço de IP elástico**".
+2. Clique em "**Alocar endreço de IP elástico**"
 
-3. Utilize o conjunto de endereços IPv4 da Amazon.
+3. Utilize o conjunto de endereços IPv4 da Amazon
 
-4. Se desejar, adicione tags descritivas associadas ao projeto.
+4. Se desejar, adicione tags descritivas associadas ao projeto
 
-5. Após criado, selecione o IP, clique em "**Ações**" e "**Associar endereço de IP elástico**".
+5. Após criado, selecione o IP, clique em "**Ações**" e "**Associar endereço de IP elástico**"
 
-6. Selecione a instância do servvidor.
+6. Selecione a instância do servvidor
 
-7. Clique em "**Associar**".
+7. Clique em "**Associar**"
 
 ## 4. Conectando à Instância
 
