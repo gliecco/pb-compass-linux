@@ -72,7 +72,7 @@ O wizard criará automaticamente:
 
 #### Preview do VPC Workflow
 
-[VPC Workflow](imgs/nginx-vpc-workflow.png)
+![VPC Workflow](imgs/nginx-vpc-workflow.png)
 
 ## 3. Criação e Configuração da Instância EC2
 
