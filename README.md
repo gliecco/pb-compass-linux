@@ -8,8 +8,11 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
 
 1. [Pré-requisitos](#1-pré-requisitos)
 2. [Configuração do Ambiente Virtual (VPC)](#2-configuração-do-ambiente-virtual-vpc)
-    - 2.1 [Craição da VPC](#21-criação-da-vpc)
+    - 2.1 [Criação da VPC](#21-criação-da-vpc)
+    - 2.2 [Configuração dos Recursos](#22-configuração-dos-recursos)
 3. [Criação e Configuração da Instância EC2](#3-criação-e-configuração-da-instância-ec2)
+    - 3.1 [Configuração do Security Group](#31-configuração-do-security-group)
+    - 3.2 [Criação da Instância](#32-criação-da-instância)
 4. [Instalação e Configuração do nginx](#4-instalação-e-configuração-do-nginx)
 5. [Criação do script de Monitoramento](#5-criação-do-script-de-monitoramento-do-status-do-nginx)
    - 5.1 [Configuração do Diretório de Logs](#51-configuração-do-diretório-de-logs)
@@ -26,18 +29,49 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
 
 ## 2. Configuração do Ambiente Virtual (VPC)
 
-Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede onde ela será executada. Vamos criar uma VPC (Virtual Private Cloud) dedicada para nosso servidor Nginx.
+Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede onde ela será executada. Criaremos uma VPC (Virtual Private Cloud) dedicada para nosso servidor Nginx.
 
 ### 2.1 Criação da VPC
 
-No console AWS, acesse o serviço VPC e crie uma nova VPC dedicada ao projeto:
+> [!NOTE]
+> A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, subnets, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **VPC wizard** cria a VPC com subnets públicas e  privadas, já anexa um Internet Gateway, configura as tabelas de rotas e inclui um NAT  Gateway, caso seja selecionado. Usaremos a criação automatizada com o VPC wizard. 
+ 
+- No console AWS, acesse o serviço VPC e clique em **criar VPC**.
 
-- Nome: nginx-vpc
-- CIDR: 10.0.0.0/16 (isso nos dará um espaço de endereços IP suficiente)
-- Habilite o DNS hostname para permitir que sua instância receba um nome DNS público
+- Em **geração automática de etiqueta de nome**, deixe marcado para gerar os nomes automaticamente
+- Digite "nginx-monitoring" como prefixo para o nome dos recursos que serão criados 
+
+## 2.2 Configuração dos recursos
+
+- CIDR da VPC: 10.0.0.0/24 (fornece 256 endereços IP, suficiente para o projeto)
+- Número de zonas de disponibilidade (AZs): 1 (precisamos apenas de uma AZ)
+- Número de subnets públicas: 1 (apenas uma subnet pública para nosso servidor)
+- Número de subnets privadas: 0 (não precisaremos de subnets privadas)
+- NAT gateways: None 
+- VPC endpoints: None 
+
+- Adicione uma tag de projeto:
+
+```
+    Key: Project
+    Value: nginx-server
+```
+
+Clique em **criar VPC** e aguarde a criação dos recursos
+
+O wizard criará automaticamente:
+
+Uma VPC com DNS hostnames habilitado
+Uma subnet pública na AZ selecionada
+Um Internet Gateway anexado à VPC
+Uma Route Table configurada com rota para o Internet Gateway
+Um Security Group padrão
 
 ## 3. Criação e Configuração da Instância EC2
 
+### 3.1 Configuração do Security Group 
+
+### 3.2 Criação da Instância
 
 ## 4. Instalação e Configuração do nginx
 
