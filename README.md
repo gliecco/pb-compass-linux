@@ -16,9 +16,9 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
     - 3.3 [Alocação do IP Elástico](#33-alocação-do-ip-elástico)
 4. [Conectando à Instância](#4-conectando-à-instância)
     - 4.1 [Configuração da Chave SSH ](#41-configuração-da-chave-ssh)
-    - 4.2 [4.2 Conexão via SSH](#42-conexão-via-ssh)
+    - 4.2 [Conexão via SSH](#42-conexão-via-ssh)
 5. [Instalação e Configuração do nginx](#5-instalação-e-configuração-do-nginx)
-6. [Criação do script de Monitoramento](#6-criação-do-script-de-monitoramento-do-status-do-nginx)
+6. [Criação do Script de Monitoramento](#6-criação-do-script-de-monitoramento-do-status-do-nginx)
    - 6.1 [Configuração do Diretório de Logs](#61-configuração-do-diretório-de-logs)
    - 6.2 [Criação do Script](#62-criação-do-script)
 7. [Automatização do Script](#7-automatização-do-script)
@@ -81,7 +81,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ## 3. Configuração e Criação da Instância EC2
 
-Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos configurar um IP elástico para garantir um endereço consistente ao servidor nginx na instância. Além disso, iremos configurar regras específicas de entrada e saída no grupo de segurança da instância. A porta SSH (22) será limitada apenas ao seu IP para garantir acesso à instância de maneira segura. As portas HTTP (80) e HTTPS (443) serão abertas para qualquer IP (0.0.0.0/0) para que o servidor nginx seja acessível publicamente. Por fim, manteremos o tráfego de saída liberado para permitir que o servidor faça download de atualizações e pacotes necessários durante a instalação e operação do nginx.
+Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e iremos configurar um IP elástico para garantir um endereço consistente ao servidor nginx na instância. Além disso, iremos configurar regras específicas de entrada e saída no grupo de segurança da instância. A porta SSH (22) será limitada apenas ao seu IP para garantir acesso à instância de maneira segura e a porta HTTP (80) será aberta para qualquer IP (0.0.0.0/0) para que o servidor nginx seja acessível publicamente. Por fim, manteremos o tráfego de saída liberado para permitir que o servidor faça download de atualizações e pacotes necessários durante a instalação e operação do nginx.
 
 ### 3.1 Configuração do Grupo de Segurança 
 
@@ -125,9 +125,6 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos config
 
     2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH.
 
-> [!IMPORTANT]
-> Caso esteja utilizando o PuTTY no Windows para se conectar à instância, você deve gerar a chave no formato `.ppk`, pois é o formato compatível com o PuTTY. Já no Linux ou macOS, a chave gerada no formato `.pem` pode ser utilizada diretamente com o comando `ssh`.
-
 3. Configurações de rede da instância:
 
     3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto.
@@ -164,34 +161,26 @@ Para instalar e configurar o nginx, primeiro precisamos nos conectar à instânc
 
 ### 4.1 Configuração da Chave SSH 
 
-1. Configure as permissões do arquivo:
+1. Use o seguinte comando para definir as permissões do seu arquivo de chave privada para que somente você possa lê-lo:
 
-   - No Linux/MacOS:
    ```bash
    chmod 400 ~/caminho/da/chave.pem
    ```
-   - No Windows (PowerShell como administrador):
-   ```powershell
-   icacls "C:\caminho\da\chave.pem" /inheritance:r /grant:r "$($env:USERNAME):(R)"
-   ```
+
+> [!IMPORTANT]
+> Se você não definir essas permissões, não será possível se conectar à sua instância usando esse par de chaves, pois, por questões de segurança, o cliente SSH rejeitará a chave.
 
 ### 4.2 Conexão via SSH
 
-#### Linux/MacOS
+1. Abra o terminal no seu computador e use o comando `ssh` para se conectar à sua instancia. Você precisará da localização da chave privada (arquivo .pem), do nome de usuário e seu DNS público, como no exemplo abaixo:
 
 ```bash
-ssh -i ~/.ssh/chave.pem ubuntu@seu-ip-elastico
+ssh -i ~/.ssh/chave.pem ubuntu@seu-dns-publico
 ```
 
-#### Windows (OpenSSH)
+2. Na primeira vez que se conectar, você verá um aviso de fingerprint. Aceite digitando "yes" para confirmar que está se conectando ao servidor correto e salvá-lo para futuras conexões seguras. Após a conexão, algumas informações sobre a distribuição Ubuntu serão exibidas, e o prompt do shell deve ser algo como:
 
-```powershell
-ssh -i C:\caminho\da\chave.pem ubuntu@seu-ip-elastico
-```
-
-Na primeira vez que se conectar, você verá um aviso de fingerprint. Aceite digitando "yes". Após a conexão, algumas informações sobre a distribuição Ubuntu serão exibidas, e o prompt do shell deve ser algo como:
-
-```
+```bash 
 ubuntu@ip-10-0-0-xx:~$
 ```
 
@@ -200,7 +189,7 @@ ubuntu@ip-10-0-0-xx:~$
 1. Abra o terminal do Ubuntu e execute o seguinte comando para garantir a instalação do pacote correto e sua versão mais recente:
 
 ```bash
-sudo apt update && apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
 
 2. Instale o nginx:
@@ -214,21 +203,22 @@ sudo apt install nginx -y
 ```bash
 sudo systemctl status nginx
 ```
-4. Caso o nginx não esteja ativo, execute o seguinte comando para ativá-lo:
 
-```bash
-sudo systemctl start nginx
-```
-
-Caso o nginx esteja rodando corretamente, o comando `systemctl status nginx` retornará uma saída como esta:
+4. Caso o nginx esteja rodando corretamente, o comando retornará uma saída como esta:
 
 ![Status do nginx Ativo](imgs/nginx_active_status.png)
 
-Para verificar se o servidor está funcionando, abra o navegador e digite o IP elástico da instância na barra de endereços. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
+5. Para garantir que o nginx inicie automaticamente após a reinicialização da instância, use o comando:
+
+```bash
+sudo systemctl enable nginx
+```
+
+6. Para verificar se o servidor está funcionando, abra o navegador e digite o IP elástico da instância na barra de endereços. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
 
 ![Página Padrão do nginx](imgs/nginx_default_homepage.png)
 
-## 6. Criação do script de monitoramento do status do nginx
+## 6. Criação do Script de monitoramento do status do nginx
 
 ### 6.1 Configuração do Diretório de Logs
 
@@ -241,7 +231,7 @@ sudo mkdir /var/log/nginx_status
 2. Altere a propriedade do diretório para seu usuário:
 
 ```bash
-sudo chown seu_usuario:seu_usuario /var/log/nginx_status
+sudo chown ubuntu:ubuntu /var/log/nginx_status
 ```
 
 3. Ajuste as permissões:
@@ -358,8 +348,8 @@ Exemplo das saídas no arquivo de log com o serviço offline:
 
 ## 8. Referências
 
+- [Documentação da Amazon Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/pt_br/vpc/?icmpid=docs_homepage_featuredsvcs)
+- [Documentação do Amazon Elastic Compute Cloud (Amazon EC2)](https://docs.aws.amazon.com/pt_br/ec2/?icmpid=docs_homepage_featuredsvcs)
 - [Documentação do WSL](https://docs.microsoft.com/en-us/windows/wsl/)
 - [Documentação do nginx](https://nginx.org/en/docs/)
 - [Guia de Configuração e Uso de Cron Jobs](https://www.pantz.org/software/cron/croninfo)
-- [Documentação da Amazon Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/pt_br/vpc/?icmpid=docs_homepage_featuredsvcs)
-- [Documentação do Amazon Elastic Compute Cloud (Amazon EC2)](https://docs.aws.amazon.com/pt_br/ec2/?icmpid=docs_homepage_featuredsvcs)
