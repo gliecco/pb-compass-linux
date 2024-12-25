@@ -13,8 +13,10 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
 3. [Configuração e Criação da Instância EC2](#3-configuração-e-criação-da-instância-ec2)
     - 3.1 [Configuração do Grupo de Segurança](#31-configuração-do-grupo-de-segurança)
     - 3.2 [Criação da Instância](#32-criação-da-instância)
-    - 3.3 [Alocação do Elastic IP](#33-alocação-do-elastic-ip)
+    - 3.3 [Alocação do IP Elástico](#33-alocação-do-ip-elástico)
 4. [Conectando à Instância](#4-conectando-à-instância)
+    - 4.1 [Configuração da Chave SSH ](#41-configuração-da-chave-ssh)
+    - 4.2 [4.2 Conexão via SSH](#42-conexão-via-ssh)
 5. [Instalação e Configuração do nginx](#5-instalação-e-configuração-do-nginx)
 6. [Criação do script de Monitoramento](#6-criação-do-script-de-monitoramento-do-status-do-nginx)
    - 6.1 [Configuração do Diretório de Logs](#61-configuração-do-diretório-de-logs)
@@ -38,11 +40,11 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ### 2.1 Configuração dos Recursos
  
-1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**
+1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**".
 
-2. Em "**Geração automática de etiqueta de nome**", deixe marcado para gerar os nomes automaticamente
+2. Em "**Geração automática de etiqueta de nome**", deixe marcado para gerar os nomes automaticamente.
 
-3. No campo de entrada, digite a etiqueta que deseja utilizar como prefixo para o nome dos recursos que serão criados
+3. No campo de entrada, digite a etiqueta que deseja utilizar como prefixo para o nome dos recursos que serão criados.
 
 4. Configure os recursos: 
 
@@ -53,7 +55,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
     - Gateway NAT: Nenhuma
     - VPC endpoints: Nenhuma 
 
-5. Opcionalmente, adicione uma tag de projeto à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto
+5. Opcionalmente, adicione uma tag de projeto à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
 
     Exemplo de tag:
 ```
@@ -63,7 +65,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 ## 2.2 Criação da VPC 
 
-1. Clique em "**Criar VPC**" e aguarde a criação dos recursos
+1. Clique em "**Criar VPC**" e aguarde a criação dos recursos.
 
 2. O wizard criará automaticamente:
 
@@ -83,30 +85,26 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos config
 
 ### 3.1 Configuração do Grupo de Segurança 
 
-1. Na aba de serviços, clique em "**EC2**"
+1. Na aba de serviços, clique em "**EC2**".
 
-2. No painel EC2, na seção "**Rede e Segurança**", clique em "**Grupos de segurança**" 
+2. No painel EC2, na seção "**Rede e Segurança**", clique em "**Grupos de segurança**".
 
-3. Localize o grupo de segurança criado pela sua VPC (procure pelo grupo de segurança associado ao ID da sua VPC no painel de informações), e clique nele para editar
+3. Localize o grupo de segurança criado pela sua VPC (procure pelo grupo de segurança associado ao ID da sua VPC no painel de informações), e clique nele para editar.
 
-4. Clique em editar as regras de entrada (Inbound rules)
+4. Clique em editar as regras de entrada (Inbound rules).
 
-5. Clique em adicionar regra. Adicione a regra para **SSH**:
+5. Clique em adicionar regra.
+
+6. Adicione uma regra para o **SSH**:
 
     - Tipo: SSH
     - Porta: 22
     - Tipo de origem: seu endereço de IP (use "**Meu IP**" para adicionar automaticamente)
 
-6. Adicione a regra para "**HTTP**":
+7. Adicione uma regra para o "**HTTP**":
 
     - Tipo: HTTP
     - Porta: 80
-    - Tipo de origem: Qualquer local-ipv4 (0.0.0.0/0)
-
-7. Por fim, adicione a regra para "**HTTPS**":
-
-    - Tipo: HTTPS
-    - Porta: 443
     - Tipo de origem: Qualquer local-ipv4 (0.0.0.0/0)
 
 8. Verifique as regras de saída (Outbound rules):
@@ -115,102 +113,138 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server e iremos config
 
 ### 3.2 Criação da Instância
 
-1. Na página principal do EC2, clique em "**Executar instância**"
+1. Na página principal do EC2, clique em "**Executar instância**".
 
 2. Configurações gerais da instância:
 
-    2.1 Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro
+    2.1 Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro.
 
-    2.2 Selecione a AMI do **Ubuntu Server 24.04 LTS**
+    2.2 Selecione a AMI do **Ubuntu Server 24.04 LTS**.
 
-    2.3 No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS
+    2.3 No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS.
 
-    2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH
+    2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH.
 
 > [!IMPORTANT]
 > Caso esteja utilizando o PuTTY no Windows para se conectar à instância, você deve gerar a chave no formato `.ppk`, pois é o formato compatível com o PuTTY. Já no Linux ou macOS, a chave gerada no formato `.pem` pode ser utilizada diretamente com o comando `ssh`.
 
 3. Configurações de rede da instância:
 
-    3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto
+    3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto.
 
-    3.2 Em "**sub-rede**", selecione a sub-rede criada com a VPC
+    3.2 Em "**sub-rede**", selecione a sub-rede criada com a VPC.
 
-    3.3 Habilite a **atribuição de IP público automaticamente**
+    3.3 Habilite a **atribuição de IP público automaticamente**.
 
-    3.4 Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC
+    3.4 Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC.
 
-4. Mantenha as configurações de armazenamento padrões
+4. Mantenha as configurações de armazenamento padrões.
 
-5. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**"
+5. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**".
 
-### 3.3 Alocação do Elastic IP
+### 3.3 Alocação do IP Elástico
 
-1. No painel EC2, na seção "**Rede e Segurança**", navegue até "**IPs elásticos**"
+1. No painel EC2, na seção "**Rede e Segurança**", navegue até "**IPs elásticos**".
 
-2. Clique em "**Alocar endreço de IP elástico**"
+2. Clique em "**Alocar endreço de IP elástico**".
 
-3. Utilize o conjunto de endereços IPv4 da Amazon
+3. Utilize o conjunto de endereços IPv4 da Amazon.
 
-4. Se desejar, adicione tags descritivas associadas ao projeto
+4. Se desejar, adicione tags descritivas associadas ao projeto.
 
-5. Após criado, selecione o IP, clique em "**Ações**" e "**Associar endereço de IP elástico**"
+5. Após criado, selecione o IP, clique em "**Ações**" e "**Associar endereço de IP elástico**".
 
-6. Selecione a instância do servvidor
+6. Selecione a instância do servidor.
 
-7. Clique em "**Associar**"
+7. Clique em "**Associar**".
 
 ## 4. Conectando à Instância
 
+Para instalar e configurar o nginx, primeiro precisamos nos conectar à instância EC2. O processo varia dependendo do seu sistema operacional.
+
+### 4.1 Configuração da Chave SSH 
+
+1. Configure as permissões do arquivo:
+
+   - No Linux/MacOS:
+   ```bash
+   chmod 400 ~/caminho/da/chave.pem
+   ```
+   - No Windows (PowerShell como administrador):
+   ```powershell
+   icacls "C:\caminho\da\chave.pem" /inheritance:r /grant:r "$($env:USERNAME):(R)"
+   ```
+
+### 4.2 Conexão via SSH
+
+#### Linux/MacOS
+
+```bash
+ssh -i ~/.ssh/chave.pem ubuntu@seu-ip-elastico
+```
+
+#### Windows (OpenSSH)
+
+```powershell
+ssh -i C:\caminho\da\chave.pem ubuntu@seu-ip-elastico
+```
+
+Na primeira vez que se conectar, você verá um aviso de fingerprint. Aceite digitando "yes". Após a conexão, algumas informações sobre a distribuição Ubuntu serão exibidas, e o prompt do shell deve ser algo como:
+
+```
+ubuntu@ip-10-0-0-xx:~$
+```
+
 ## 5. Instalação e Configuração do nginx
 
-Abra o terminal do Ubuntu e execute o seguinte comando para garantir a instalação do pacote correto e sua versão mais recente:
+1. Abra o terminal do Ubuntu e execute o seguinte comando para garantir a instalação do pacote correto e sua versão mais recente:
 
 ```bash
-sudo apt update
+sudo apt update && apt upgrade -y
 ```
 
-Após isso, instale o nginx:
+2. Instale o nginx:
 
 ```bash
-sudo apt install nginx
+sudo apt install nginx -y
 ```
 
-Inicie e verifique o status do nginx:
+3. Verifique o status do nginx:
+
+```bash
+sudo systemctl status nginx
+```
+4. Caso o nginx não esteja ativo, execute o seguinte comando para ativá-lo:
 
 ```bash
 sudo systemctl start nginx
 ```
 
-```bash
-sudo systemctl status nginx
-```
+Caso o nginx esteja rodando corretamente, o comando `systemctl status nginx` retornará uma saída como esta:
 
-Caso o nginx esteja rodando corretamente, o comando retornará uma saída como esta:
+![Status do nginx Ativo](imgs/nginx_active_status.png)
 
-![Status do nginx Ativo](imgs/nginx_status_ativo.jpeg)
+Para verificar se o servidor está funcionando, abra o navegador e digite o IP elástico da instância na barra de endereços. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
 
-Para verificar se o servidor está funcionando, abra o navegador e digite "https://localhost" na barra de endereços. 'Localhost' aponta para o IP do seu próprio computador, permitindo que você acesse o servidor localmente. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
-
-![Página Padrão do nginx](imgs/nginx_via_localhost.jpeg)
+![Página Padrão do nginx](imgs/nginx_default_homepage.png)
 
 ## 6. Criação do script de monitoramento do status do nginx
 
 ### 6.1 Configuração do Diretório de Logs
 
-Antes de criar o script, criaremos o diretório onde serão armazenados os logs de monitoramento do nginx:
+1. Antes de criar o script, criaremos o diretório onde serão armazenados os logs de monitoramento do nginx:
 
 ```bash
 sudo mkdir /var/log/nginx_status
 ```
 
-Altere a propriedade do diretório para seu usuário:
+2. Altere a propriedade do diretório para seu usuário:
 
 ```bash
 sudo chown seu_usuario:seu_usuario /var/log/nginx_status
 ```
 
-Em seguida, ajuste as permissões:
+3. Ajuste as permissões:
 
 ```bash
 sudo chmod 755 /var/log/nginx_status
@@ -222,13 +256,13 @@ Essa configuração garante que você tenha acesso total ao diretório, enquanto
 
 Armazenaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
 
-Para criar e editar o script, utilize um editor de texto. Utilizando o `nano`:
+1. Para criar e editar o script, utilize um editor de texto. Utilizando o `nano`:
 
 ```bash
 sudo nano /usr/local/bin/nginx_status_monitor.sh
 ```
 
-Digite o script:
+2. Digite o script:
 
 ```bash
 #!/bin/bash
@@ -254,37 +288,39 @@ else
 fi
 ```
 
-Pressione `CTRL + O` e `ENTER` para salvar e `CTRL + X` para sair. Após isso, garanta permissão de execução ao script para que você possa rodá-lo:
+3 Pressione `CTRL + O` e `ENTER` para salvar e `CTRL + X` para sair. Após isso, garanta permissão de execução ao script para que você possa rodá-lo:
 
 ```bash
 sudo chmod +x /usr/local/bin/nginx_status_monitor.sh
 ```
 
-Para verificar se está funcionando corretamente, execute o script manualmente:
+4. Para verificar se está funcionando corretamente, execute o script manualmente:
 
 ```bash
 nginx_status_monitor.sh
 ```
 
-Em seguida, verifique os arquivos de log correspondentes. Exemplo do arquivo de log `nginx_online.log` com os logs do serviço ativos:
+5. Em seguida, verifique os arquivos de log correspondentes. Exemplo do arquivo de log `nginx_online.log` com os logs do serviço ativos:
 
-![Entrada de Log Online Manual](imgs/manual_online_log_entry.jpeg)
+![Entrada de Log Online Manual](imgs/manual_online_log_entry.png)
 
 ## 7. Automatização do Script
 
-Para automatizar a execução do script, utilizaremos o serviço **cron**. O cron é um serviço do sistema operacional responsável por agendar e executar tarefas automaticamente em intervalos definidos. Ele usa o arquivo **crontab** para armazenar as configurações das tarefas, que podem ser executadas em horários específicos. Para automatizar nosso script, execute o seguinte comando para abrir e editar o crontab:
+Para automatizar a execução do script, utilizaremos o serviço **cron**. O cron é um serviço do sistema operacional responsável por agendar e executar tarefas automaticamente em intervalos definidos. Ele usa o arquivo **crontab** para armazenar as configurações das tarefas, que podem ser executadas em horários específicos. 
+
+1. Para automatizar nosso script, execute o seguinte comando para abrir e editar o crontab:
 
 ```bash
 crontab -e
 ```
 
-Selecione um editor de texto. Adicione a seguinte linha ao arquivo:
+2. Selecione um editor de texto. Adicione a seguinte linha ao arquivo:
 
 ```bash
 */5 * * * * /usr/local/bin/nginx_status_monitor.sh
 ```
 
-Salve e saia do arquivo.
+3. Salve e saia do arquivo.
 
 Os arquivos de configuração do cron possuem cinco campos para especificar tempo e data, seguidos pelo comando que será executado. Cada um desses cinco campos é separado por um espaço e não podem haver espaços dentro de cada campo. Eles são os seguintes:
 
@@ -300,26 +336,30 @@ Sendo assim, no nosso caso, a expressão \*/5 \* \* \* \* faz com que o script s
 
 ### 7.1 Validando a automatização do script
 
-Após salvar as configurações no crontab, a execução do script será iniciada automaticamente a cada cinco minutos. Podemos checar a lista de tarefas agendadas no cron com o seguinte comando:
+Após salvar as configurações no crontab, a execução do script será iniciada automaticamente a cada cinco minutos. 
 
-```bash
-crontab -l
-```
+1. Podemos checar a lista de tarefas agendadas no cron com o seguinte comando:
 
-O comando deve retornar a tarefa configurada anteriormente como na imagem seguinte:
+    ```bash
+    crontab -l
+    ```
 
-![Crontab -l Output](imgs/crontab-l.jpeg)
+    1.1 O comando deve retornar a tarefa configurada anteriormente como na imagem seguinte:
+
+    ![Crontab -l Output](imgs/crontab-l.png)
 
 Exemplo das saídas no arquivo de log com o serviço online:
 
-![Logs do Cron Online](imgs/online_log_cron_entries.jpeg)
+![Logs do Cron Online](imgs/nginx_online_log_entry.png)
 
 Exemplo das saídas no arquivo de log com o serviço offline:
 
-![Logs do Cron Offline](imgs/offline_log_cron_entries.jpeg)
+![Logs do Cron Offline](imgs/nginx_offline_log_entry.png)
 
 ## 8. Referências
 
 - [Documentação do WSL](https://docs.microsoft.com/en-us/windows/wsl/)
 - [Documentação do nginx](https://nginx.org/en/docs/)
 - [Guia de Configuração e Uso de Cron Jobs](https://www.pantz.org/software/cron/croninfo)
+- [Documentação da Amazon Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/pt_br/vpc/?icmpid=docs_homepage_featuredsvcs)
+- [Documentação do Amazon Elastic Compute Cloud (Amazon EC2)](https://docs.aws.amazon.com/pt_br/ec2/?icmpid=docs_homepage_featuredsvcs)
