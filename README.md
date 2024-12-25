@@ -175,7 +175,7 @@ Para instalar e configurar o nginx, primeiro precisamos nos conectar à instânc
 1. Abra o terminal no seu computador e use o comando `ssh` para se conectar à sua instancia. Você precisará da localização da chave privada (arquivo .pem), do nome de usuário e seu DNS público, como no exemplo abaixo:
 
 ```bash
-ssh -i ~/.ssh/chave.pem ubuntu@seu-dns-publico
+ssh -i ~/caminho/da/chave.pem ubuntu@seu-dns-publico
 ```
 
 2. Na primeira vez que se conectar, você verá um aviso de fingerprint. Aceite digitando "yes" para confirmar que está se conectando ao servidor correto e salvá-lo para futuras conexões seguras. Após a conexão, algumas informações sobre a distribuição Ubuntu serão exibidas, e o prompt do shell deve ser algo como:
