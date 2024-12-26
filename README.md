@@ -55,13 +55,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
     - Gateway NAT: Nenhuma
     - VPC endpoints: Nenhuma 
 
-5. Opcionalmente, adicione uma tag de projeto à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
-
-    Exemplo de tag:
-```
-    Chave: Projeto
-    Valor: servidor-nginx
-```
+5. Opcionalmente, adicione tags descritivas à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
 
 ## 2.2 Criação da VPC 
 
@@ -117,27 +111,27 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e ire
 
 2. Configurações gerais da instância:
 
-    2.1 Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro.
+    - Crie tags descritivas associadas ao projeto para facilitar o gerenciamento da instância no futuro.
 
-    2.2 Selecione a AMI do **Ubuntu Server 24.04 LTS**.
+    - Selecione a AMI do **Ubuntu Server 24.04 LTS**.
 
-    2.3 No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS.
+    - No **tipo de instância**, selecione a **t2.micro**. Para o caso de utilização do projeto, os recursos da t2.micro serão suficientes. Além disto, ela está inclusa no nível gratuito da AWS.
 
-    2.4 Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH.
+    - Crie um par de chaves ou selecione um par de chaves já existente. Elas serão necessárias para acessar a instância via SSH.
 
 3. Configurações de rede da instância:
 
-    3.1 Em "**VPC**", selecione a VPC criada anteriormente para o projeto.
+    - Em "**VPC**", selecione a VPC criada anteriormente para o projeto.
 
-    3.2 Em "**sub-rede**", selecione a sub-rede criada com a VPC.
+    - Em "**sub-rede**", selecione a sub-rede criada com a VPC.
 
-    3.3 Habilite a **atribuição de IP público automaticamente**.
+    - Habilite a **atribuição de IP público automaticamente**.
 
-    3.4 Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC.
+    - Em "**Grupos de segurança comuns**", selecione o grupo de segurança criado com a VPC.
 
 4. Mantenha as configurações de armazenamento padrões.
 
-5. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**".
+2. Revise as configurações. Caso esteja tudo correto, clique em "**Executar instância**".
 
 ### 3.3 Alocação do IP Elástico
 
@@ -157,7 +151,7 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e ire
 
 ## 4. Conectando à Instância
 
-Para instalar e configurar o nginx, primeiro precisamos nos conectar à instância EC2. O processo varia dependendo do seu sistema operacional.
+Primeiro, iremos ajustar as permissões da chave privada. Em seguida, iremos usar essa chave para estabelecer uma conexão segura via SSH com a instância.
 
 ### 4.1 Configuração da Chave SSH 
 
@@ -204,7 +198,7 @@ sudo apt install nginx -y
 sudo systemctl status nginx
 ```
 
-4. Caso o nginx esteja rodando corretamente, o comando retornará uma saída como esta:
+4. Caso o nginx esteja rodando corretamente, o comando retornará uma saída como essa:
 
 ![Status do nginx Ativo](imgs/nginx_active_status.png)
 
@@ -244,7 +238,7 @@ Essa configuração garante que você tenha acesso total ao diretório, enquanto
 
 ### 6.2 Criação do Script
 
-Armazenaremos o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
+Iremos armazenar o script dentro do diretório `/usr/local/bin`. Esse diretório já está incluído no PATH por padrão, permitindo a execução do script de qualquer lugar, sem precisar especificar o caminho completo.
 
 1. Para criar e editar o script, utilize um editor de texto. Utilizando o `nano`:
 
@@ -278,7 +272,7 @@ else
 fi
 ```
 
-3 Pressione `CTRL + O` e `ENTER` para salvar e `CTRL + X` para sair. Após isso, garanta permissão de execução ao script para que você possa rodá-lo:
+3. Pressione `CTRL + O` e `ENTER` para salvar e `CTRL + X` para sair. Após isso, garanta permissão de execução ao script para que você possa rodá-lo:
 
 ```bash
 sudo chmod +x /usr/local/bin/nginx_status_monitor.sh
@@ -350,6 +344,5 @@ Exemplo das saídas no arquivo de log com o serviço offline:
 
 - [Documentação da Amazon Virtual Private Cloud (VPC)](https://docs.aws.amazon.com/pt_br/vpc/?icmpid=docs_homepage_featuredsvcs)
 - [Documentação do Amazon Elastic Compute Cloud (Amazon EC2)](https://docs.aws.amazon.com/pt_br/ec2/?icmpid=docs_homepage_featuredsvcs)
-- [Documentação do WSL](https://docs.microsoft.com/en-us/windows/wsl/)
 - [Documentação do nginx](https://nginx.org/en/docs/)
 - [Guia de Configuração e Uso de Cron Jobs](https://www.pantz.org/software/cron/croninfo)
