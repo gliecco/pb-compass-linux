@@ -87,21 +87,19 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e ire
 
 4. Clique em editar as regras de entrada (Inbound rules).
 
-5. Clique em adicionar regra.
-
-6. Adicione uma regra para o **SSH**:
+5. Adicione uma regra para o **SSH**:
 
     - Tipo: SSH
     - Porta: 22
     - Tipo de origem: seu endereço de IP (use "**Meu IP**" para adicionar automaticamente)
 
-7. Adicione uma regra para o "**HTTP**":
+6. Adicione uma regra para o "**HTTP**":
 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de origem: Qualquer local-ipv4 (0.0.0.0/0)
 
-8. Verifique as regras de saída (Outbound rules):
+7. Verifique as regras de saída (Outbound rules):
 
     - Mantenha a regra padrão que permite todo tráfego (0.0.0.0/0)
 
