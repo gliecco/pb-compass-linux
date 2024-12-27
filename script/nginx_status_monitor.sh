@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # obtém a data e hora atuais
 data_hora=$(date "+%d-%m-%Y %H:%M:%S")

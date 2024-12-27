@@ -247,7 +247,7 @@ sudo nano /usr/local/bin/nginx_status_monitor.sh
 2. Digite o script:
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 # obtém a data e hora atuais
 data_hora=$(date "+%d-%m-%Y %H:%M:%S")
